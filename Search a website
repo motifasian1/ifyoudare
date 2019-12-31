@@ -1,0 +1,27 @@
+import edu.duke.*;
+/**
+ * Write a description of Part4 here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class Part4 {
+    public void webLinks() {
+        URLResource ur = new URLResource("http://www.dukelearntoprogram.com/course2/data/manylinks.html");
+        System.out.println("Start of app");
+        for (String s: ur.words()) {
+            String lowerSentence = s.toLowerCase();
+            //Look for the work youtube.com in the string
+            if(lowerSentence.contains("youtube.com")) {
+                int indexOfYT = lowerSentence.indexOf("youtube.com");
+                //Find the ending double quote after youtube.com
+                int indexOfEnding = lowerSentence.indexOf("\"", indexOfYT+10);
+                //Find the beginning double quote before youtube.com
+                int indexOfBeginning = lowerSentence.lastIndexOf("\"", (indexOfEnding-1));
+                System.out.println("Youtube link is: " + s.substring(indexOfBeginning, indexOfEnding+1));
+                System.out.println(indexOfBeginning);
+                System.out.println(indexOfEnding);
+            }
+        }
+    }
+}
