@@ -1,0 +1,115 @@
+import edu.duke.*;
+import org.apache.commons.csv.*;
+/**
+ * Write a description of ParsingExportData here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class ParsingExportData {
+    public void listExporters(CSVParser parser, String exportOfInterest) {
+        //for each row in the CSV file
+        for (CSVRecord record: parser) {
+            //Look at the "Exports" column
+            String export = record.get("Exports");
+            //check if it contains exportOfInterest
+            if (export.contains(exportOfInterest)){
+                //if so, write down the "Country" from that row
+                String country = record.get("Country");
+                System.out.println(country);
+            }
+        }
+    }
+    
+    public void whoExportsCoffee() {
+        FileResource fr = new FileResource();
+        CSVParser parser = fr.getCSVParser();
+        listExporters(parser, "coffee");
+    }
+    
+    public void tester () {
+        FileResource fr = new FileResource();
+        CSVParser parser = fr.getCSVParser();
+        String country = "Nauru";
+        countryInfo(parser, country);
+        parser = fr.getCSVParser();//reset parser to use with new method
+        listExportersTwoProducts(parser, "gold", "diamonds");
+        parser = fr.getCSVParser();
+        System.out.println(numberOfExporters(parser, "sugar"));
+        parser = fr.getCSVParser();
+        bigExporters(parser, "$999,999,999,999");
+    }
+    
+    public String countryInfo(CSVParser parser, String countrySearch) {
+        //while there is info in the parser, return the county: exports: value
+        for (CSVRecord record: parser) {
+            //Look at the "Country" column
+            String country = record.get("Country");
+            String exports = record.get("Exports");
+            String value = record.get("Value (dollars)");
+            //check if it contains the country of interest
+            if (country.isEmpty()){
+                break;
+            }
+            //if country exports somtehing, write down the "Exports" and "Value (dollars))"from that row
+            if (country.contains(countrySearch)) {
+                System.out.print(country + ": ");
+                System.out.print(exports + ": ");
+                System.out.println(value);
+            }
+        }
+        return "NOT FOUND";
+    }
+    
+    public void listExportersTwoProducts (CSVParser parser, String exportItem1, String exportItem2) {
+        //while there is info in the parser, return the county
+        for (CSVRecord record: parser) {
+            //Look at the "Country" column and Exports column
+            String country = record.get("Country");
+            String exports = record.get("Exports");
+            //Check if the record contains exports 
+            if (exports.isEmpty()){
+                break;
+            }
+            //if country exports the 2 items being queried, write down the names of the countries
+            if (exports.contains(exportItem1) && exports.contains(exportItem2)) {
+                System.out.println(country);
+            }
+        }
+    }
+    
+    public int numberOfExporters (CSVParser parser, String exportItem) {
+        int numCountries = 0;
+        //grab the records in the parser one row at a time
+        for (CSVRecord record: parser) {
+            String country = record.get("Country");
+            String exports = record.get("Exports");
+            //Check if exports is empty
+            if (exports.isEmpty()) {
+                break;
+            }
+            //check if the country exports the item of interest
+            if (exports.contains(exportItem)) {
+                //increase counter
+                numCountries++;
+            }
+        }
+        return numCountries;
+    }
+    
+    public void bigExporters(CSVParser parser, String amount) {
+        int stringLength = amount.length();
+        int numBigExporters = 0;
+        for (CSVRecord record: parser) {
+            String country = record.get("Country");
+            String value = record.get("Value (dollars)");
+            //check if the value is empty
+            if (value.isEmpty()) {
+                break;
+            }
+            if (value.length() > stringLength) {
+                System.out.println(country + " $" + value);
+            }
+        }
+    }
+}
