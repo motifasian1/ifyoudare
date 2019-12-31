@@ -1,9 +1,9 @@
 import edu.duke.*;
 /**
- * Write a description of Part4 here.
+ * Searches a URL to find any links to Youtube on the url and prints those links out to the command line
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author JY
+ * @version 1.0
  */
 public class Part4 {
     public void webLinks() {
