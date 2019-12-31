@@ -1,9 +1,9 @@
 import edu.duke.*;
 /**
- * Write a description of Part1 here.
+ * This program finds all of the genes starting with ATG and ending in TAA, TAG, or TGA in a sequence of DNA
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author JY
+ * @version 1.0
  */
 public class Part1 {
     public String findSimpleGene(String dna, int where) {
