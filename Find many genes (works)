@@ -1,8 +1,8 @@
 
 /**
- * Write a description of FinalQuizRedo here.
+ * This program actually works in finding all of the genes inside a string of DNA
  * 
- * @author Joe
+ * @author JY
  * @version 1.0
  */
 public class FinalQuizRedo {
