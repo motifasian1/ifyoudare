@@ -1,0 +1,87 @@
+import edu.duke.*;
+import org.apache.commons.csv.*;
+import java.io.*;
+
+/**
+ * Write a description of BabyBirths here.
+ * 
+ * @author JY
+ * @version 5.0
+ */
+public class BabyBirthsV5 {
+    public double getAverageRank(String name, String gender) {
+        //Var for year the file with highest rank is contained in
+        int yearOfFile = 0;
+        String nameOfFile = null;
+        //select a range of files to process in a folder by creating a dr
+        DirectoryResource dr = new DirectoryResource();
+        int totalRank = 0;
+        int numFiles = 0;
+        //Loop over each individual file in the dr folder
+        for (File file: dr.selectedFiles()) {
+            //count numFiles
+            numFiles++;
+            //For each individual file, create a fr for each file to access 
+            //CSVParser methods
+            int newRankInSearch = 0;
+            FileResource fr = new FileResource(file);
+            //Create a CSVParser to get the parser from the fr file
+            CSVParser parser = fr.getCSVParser(false);
+            StorageResource f = new StorageResource();
+            StorageResource m = new StorageResource();
+            for (CSVRecord rec : parser) {
+                //loop over all of the CSVRecords(rows) in the file and split up
+                //the girls and boys' names into gender based StorageResources
+                if (rec.get(1).equals("F")) {
+                    //for each row, store in f if F or m if male
+                    f.add(rec.get(0));
+                }
+                else {
+                    //store the name in male index 0
+                    m.add(rec.get(0));
+                }
+            }
+            
+            
+            //Determine whether to search the m or f storageResource for the given
+            //name
+            if (gender.equals("M")) {
+                //if looking for a male
+                //loop through the StorageResource until I find the name
+                for (String item: m.data()) {
+                    //immediately increment rank, b/c starting search at rank1
+                    newRankInSearch++;
+                    if (item.contains(name)) {
+                    //after finding the name given, break the loop 
+                    break;
+                    }
+                }
+                //if no gender matches, but no name, return -1                
+            }
+            else if (gender.equals("F")) {
+                //loop through the StorageResource until I find the name
+                for (String item: f.data()) {
+                    //immediately increment rank, b/c starting search at rank1
+                    newRankInSearch++;
+                    if (item.contains(name)) {
+                    //after finding the name given, break the loop 
+                    break;
+                    }
+                }
+                //if no gender matches, but no name, return -1
+            }
+            totalRank += newRankInSearch;
+        }
+        //if rankInSearch = -1, name not in any file, return -1
+        if (totalRank == -1) {
+            return -1.0;
+        }
+    return ((double) totalRank)/numFiles;
+    }
+    
+    public void getAverageRank() {
+        String name = "Robert";
+        String gender = "M";
+        System.out.println(getAverageRank(name, gender));
+    }
+}
