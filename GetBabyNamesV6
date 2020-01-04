@@ -1,0 +1,50 @@
+import edu.duke.*;
+import org.apache.commons.csv.*;
+import java.io.*;
+
+/**
+ * Write a description of BabyBirths here.
+ * 
+ * @author JY
+ * @version 6.0
+ */
+public class BabyBirthsV6 {
+    public int getTotalBirthsRankedHigher(int year, String name, String gender) {
+        //select a range of files to process in a folder by creating a dr
+        DirectoryResource dr = new DirectoryResource();
+        int totalBirths = 0;
+        int currBirths = 0;
+        //Loop over each individual file in the dr folder
+        for (File file: dr.selectedFiles()) {
+            //For each individual file, create a fr for each file to access 
+            //CSVParser methods
+            FileResource fr = new FileResource(file);
+            //Create a CSVParser to get the parser from the fr file
+            CSVParser parser = fr.getCSVParser(false);
+            for (CSVRecord rec : parser) {
+                //loop over all of the CSVRecords(rows) in the file and split up
+                //the girls and boys' names into gender based StorageResources
+                if (rec.get(1).equals(gender)) {
+                    //if the gender matches, check the name
+                    if (rec.get(0).equals(name) == false) {
+                        //if the name does not match, add up the num births
+                        currBirths = Integer.parseInt(rec.get(2));
+                        System.out.println(rec.get(0) + " " + rec.get(2));
+                        totalBirths += currBirths;
+                    }
+                    if (rec.get(0).equals(name) == true) {
+                        break;
+                    }
+                }
+            }
+        }
+    return totalBirths;
+    }
+    
+    public void testGetTotalBirthsRankedHigher() {
+        String name = "Drew";
+        String gender = "M";
+        int year = 0;
+        System.out.println(getTotalBirthsRankedHigher(year, name, gender));
+    }
+}
