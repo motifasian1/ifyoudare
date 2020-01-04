@@ -1,0 +1,347 @@
+import edu.duke.*;
+import org.apache.commons.csv.*;
+import java.io.*;
+
+/**
+ * Write a description of BabyBirths here.
+ * 
+ * @author JY
+ * @version 4.0
+ */
+public class BabyBirthsV4 {
+    public void printNames() {
+        FileResource fr = new FileResource();
+        for (CSVRecord rec : fr.getCSVParser(false)) {
+            //no header row, start printing data from rows immediately
+            int numBorn = Integer.parseInt(rec.get(2));
+            if (numBorn <= 100) {
+            System.out.println("Name " + rec.get(0) + 
+                               " Gender " + rec.get(1) +
+                               " Num Born " + rec.get(2));
+                            }
+        }
+    }
+    
+    public void totalBirths(FileResource fr) {
+        int totalBirths = 0;
+        int totalBoys = 0;
+        int totalGirls = 0;
+        int numBoyNames = 0;
+        int numGirlNames = 0;
+        for (CSVRecord rec : fr.getCSVParser(false)) {
+            //loop over all of the CSVRecords(rows) in the file fr
+            int numBorn = Integer.parseInt(rec.get(2));
+            totalBirths += numBorn;
+            //divide births by gender
+            if (rec.get(1).equals("M")) {
+                totalBoys += numBorn;
+                numBoyNames += numBorn;
+            }
+            else {
+                totalGirls += numBorn;
+                numGirlNames += numBorn;
+            }
+        }
+        System.out.println("total births = " + totalBirths);
+        System.out.println("total girls = " + totalGirls);
+        System.out.println("total boys = " + totalBoys);
+        System.out.println("total girl names = " + numGirlNames);
+        System.out.println("total boy names = " + numBoyNames);
+    }
+        
+    public void testTotalBirths() {
+        FileResource fr = new FileResource();
+        totalBirths(fr);
+    }
+    
+    
+    
+    public int getRank(int year, String name, String gender) {
+        //if name isn't in file, return -1
+        int rank = 0;
+        StorageResource f = new StorageResource();
+        StorageResource m = new StorageResource();
+        FileResource fr = new FileResource();
+        for (CSVRecord rec : fr.getCSVParser(false)) {
+            //loop over all of the CSVRecords(rows) in the file and split up
+            //the girls and boys by gender
+            if (rec.get(1).equals("F")) {
+                //for each row, store in f if F or m if male
+                f.add(rec.get(0));
+            }
+            else {
+                //store the name in male index 0
+                m.add(rec.get(0));
+            }
+        }
+        //Determine whether to search the m or f storageResource for the given
+        //name
+        if (gender.equals("M")) {
+            //loop through the StorageResource until I find the name
+            for (String item: m.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rank++;
+                if (item.contains(name)) {
+                return rank;
+                }
+            }
+        }
+        else {
+            //loop through the StorageResource until I find the name
+            for (String item: f.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rank++;
+                if (item.contains(name)) {
+                return rank;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public void testGetRank() {
+        int year = 1972;
+        String name = "Susan";
+        String gender = "F";
+        System.out.println(getRank(year, name, gender));
+    }
+    
+    
+    public String getName(int year, int rank, String gender) {
+        int rankInSearch = 0;
+        String name = "";
+        StorageResource f = new StorageResource();
+        StorageResource m = new StorageResource();
+        FileResource fr = new FileResource();
+        for (CSVRecord rec : fr.getCSVParser(false)) {
+            //loop over all of the CSVRecords(rows) in the file and split up
+            //the girls and boys by gender
+            if (rec.get(1).equals("F")) {
+                //for each row, store in f if F or m if male
+                f.add(rec.get(0));
+            }
+            else {
+                //store the name in male index 0
+                m.add(rec.get(0));
+            }
+        }
+        //Determine whether to search the m or f storageResource for the given
+        //name
+        if (gender.equals("M")) {
+            //loop through the StorageResource until I find the rank as a string
+            for (String item: m.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rankInSearch++;
+                //Once at the row/rank of the gender given, pull out the name
+                if (rankInSearch == rank) {
+                    //how do i return the name from the string "item"?
+                return item;
+                }
+            }
+        }
+        else {
+            //loop through the StorageResource until I find the name
+            for (String item: f.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rankInSearch++;
+                if (rankInSearch == rank) {
+                    //how do i return the name from the string item?
+                return item;
+                }
+            }
+        }
+        return "NO NAME";
+    }
+    
+    public void testGetName() {
+        int year = 2014;
+        String name = "Susan";
+        int rank = 24;
+        String gender = "F";
+        System.out.println(getName(year, rank, gender));
+    }
+    
+    public void whatIsNameInYear (String name, int year, int newYear, String gender) {
+        int rankInSearch = 0;
+        StorageResource f = new StorageResource();
+        StorageResource m = new StorageResource();
+        FileResource fr = new FileResource();
+        for (CSVRecord rec : fr.getCSVParser(false)) {
+            //loop over all of the CSVRecords(rows) in the file and split up
+            //the girls and boys' names into gender based StorageResources
+            if (rec.get(1).equals("F")) {
+                //for each row, store in f if F or m if male
+                f.add(rec.get(0));
+            }
+            else {
+                //store the name in male index 0
+                m.add(rec.get(0));
+            }
+        }
+        
+        
+        //Determine whether to search the m or f storageResource for the given
+        //name
+        if (gender.equals("M")) {
+            //loop through the StorageResource until I find the name
+            for (String item: m.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rankInSearch++;
+                if (item.contains(name)) {
+                //after finding the name given, break the loop 
+                break;
+                }
+            }
+        }
+        else {
+            //loop through the StorageResource until I find the name
+            for (String item: f.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rankInSearch++;
+                if (item.contains(name)) {
+                //after finding the name given, break the loop 
+                break;
+                }
+            }
+        }
+        
+        //Create fr to search second file
+        FileResource fr2 = new FileResource();
+        StorageResource f2 = new StorageResource();
+        StorageResource m2 = new StorageResource();
+        for (CSVRecord rec : fr2.getCSVParser(false)) {
+            //loop over all of the CSVRecords(rows) in the file and split up
+            //the girls and boys' names into gender based StorageResources
+            if (rec.get(1).equals("F")) {
+                //for each row, store in f if F or m if male
+                f2.add(rec.get(0));
+            }
+            else {
+                //store the name in male index 0
+                m2.add(rec.get(0));
+            }
+        }
+        //Search second file for name2 that has the same rank as name1 in file1
+        int rankInSearchName2 = 0;
+        String name2 = null;
+        if (gender.equals("M")) {
+            //loop through the StorageResource, which holds the names, until I find the rank of the name
+            for (String item: m2.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rankInSearchName2++;
+                //Once at the row/rank of the gender given, pull out the name
+                if (rankInSearch == rankInSearchName2) {
+                //return the name of the rank given
+                name2 = item;
+                }
+            }
+        }
+        else {
+            //loop through the StorageResource until I find the name
+            for (String item: f2.data()) {
+                //immediately increment rank, b/c starting search at rank1
+                rankInSearchName2++;
+                //Once at the row/rank of the gender given, pull out the name
+                if (rankInSearch == rankInSearchName2) {
+                //return the name of the rank given
+                name2 = item;
+                }
+            }
+        }
+        
+        System.out.println(name + " born in " + year + " would be " + name2 
+                          + " if she was born in " + newYear);
+    }
+    
+    public void testWhatIsNameInYear() {
+        String name = "Isabella";
+        int year = 2012;
+        int newYear = 2014;
+        String gender = "F";
+        whatIsNameInYear(name, year, newYear, gender);
+    }
+    
+    public int yearOfHighestRank(String name, String gender) {
+        //Var for year the file with highest rank is contained in
+        int yearOfFile = 0;
+        String nameOfFile = null;
+        //select a range of files to process in a folder by creating a dr
+        DirectoryResource dr = new DirectoryResource();
+        int rankInSearch = 0;
+        //Loop over each individual file in the dr folder
+        for (File file: dr.selectedFiles()) {
+            //For each individual file, create a fr for each file to access 
+            //CSVParser methods
+            int newRankInSearch = 0;
+            FileResource fr = new FileResource(file);
+            //Create a CSVParser to get the parser from the fr file
+            CSVParser parser = fr.getCSVParser(false);
+            StorageResource f = new StorageResource();
+            StorageResource m = new StorageResource();
+            for (CSVRecord rec : parser) {
+                //loop over all of the CSVRecords(rows) in the file and split up
+                //the girls and boys' names into gender based StorageResources
+                if (rec.get(1).equals("F")) {
+                    //for each row, store in f if F or m if male
+                    f.add(rec.get(0));
+                }
+                else {
+                    //store the name in male index 0
+                    m.add(rec.get(0));
+                }
+            }
+            
+            
+            //Determine whether to search the m or f storageResource for the given
+            //name
+            if (gender.equals("M")) {
+                //if looking for a male
+                //loop through the StorageResource until I find the name
+                for (String item: m.data()) {
+                    //immediately increment rank, b/c starting search at rank1
+                    newRankInSearch++;
+                    if (item.contains(name)) {
+                    //after finding the name given, break the loop 
+                    break;
+                    }
+                }
+                //if no gender matches, but no name, return -1                
+            }
+            else if (gender.equals("F")) {
+                //loop through the StorageResource until I find the name
+                for (String item: f.data()) {
+                    //immediately increment rank, b/c starting search at rank1
+                    newRankInSearch++;
+                    if (item.contains(name)) {
+                    //after finding the name given, break the loop 
+                    break;
+                    }
+                }
+                //if no gender matches, but no name, return -1
+            }
+
+            if (rankInSearch == 0) {
+                rankInSearch = newRankInSearch;
+                nameOfFile = file.getName();
+                yearOfFile = Integer.parseInt(nameOfFile.substring(3,7));
+            } else if (rankInSearch > newRankInSearch) { 
+                //if the person's rank is higher in another year (lower absolute value)
+                //update rankInSearch
+                rankInSearch = newRankInSearch;
+                nameOfFile = file.getName();
+                yearOfFile = Integer.parseInt(nameOfFile.substring(3,7));
+            }
+        }
+        //if rankInSearch = -1, name not in any file, return -1
+        if (rankInSearch == -1) {
+            return -1;
+        }
+    return yearOfFile;
+    }
+    
+    public void testYearOfHighestRank() {
+        String name = "Mich";
+        String gender = "M";
+        System.out.println(yearOfHighestRank(name, gender));
+    }
+}
