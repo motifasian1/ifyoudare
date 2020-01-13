@@ -1,0 +1,113 @@
+import edu.duke.*;
+import java.util.*;
+/**
+ * Write a description of CodonCount here.
+ * 
+ * @author JY
+ * @version 1.0
+ */
+public class CodonCount {
+    private HashMap<String,Integer> map;
+    
+    public CodonCount () {
+        map = new HashMap<String,Integer>();
+    }
+    
+    public void buildCodonMap(int start, String dna) {
+        //Reading frame 0
+        //Check if codon exists in map
+        //If not in map, then add to key and give value 1
+        //Else, increment the key's value
+        if (start==0) {
+            int startIndex=start;
+            //Starting at index=0, divide DNA into triplets
+            for (int i=start; i<dna.length(); i+=3) {
+                if ((i+3) <= dna.length()) {
+                    String codon = dna.substring(i,i+3).toUpperCase();
+                    //check if the codon is any of the existing keys
+                    if (map.keySet().contains(codon)) {
+                        //if true, then put an incremented value at that key 
+                        map.put(codon,map.get(codon)+1);
+                    } else {
+                        //else add the key to the map with value 1
+                        map.put(codon,1);
+                    }
+                }
+            }
+        }
+        
+        if (start==1) {
+            int startIndex=start;
+            //Starting at index=1, divide DNA into triplets
+            for (int i=start; i<dna.length(); i+=3) {
+                if ((i+3) <= dna.length()) {
+                    String codon = dna.substring(i,i+3).toUpperCase();
+                    //check if the codon is any of the existing keys
+                    if (map.keySet().contains(codon)) {
+                        //if true, then put an incremented value at that key 
+                        map.put(codon,map.get(codon)+1);
+                    } else {
+                        //else add the key to the map with value 1
+                        map.put(codon,1);
+                    }
+                }
+            }
+        }
+        
+        if (start==2) {
+            int startIndex=start;
+            //Starting at index=2, divide DNA into triplets
+            for (int i=start; i<dna.length(); i+=3) {
+                if ((i+3) <= dna.length()) {
+                    String codon = dna.substring(i,i+3).toUpperCase();
+                    //check if the codon is any of the existing keys
+                    if (map.keySet().contains(codon)) {
+                        //if true, then put an incremented value at that key 
+                        map.put(codon,map.get(codon)+1);
+                    } else {
+                        //else add the key to the map with value 1
+                        map.put(codon,1);
+                    }
+                }
+            }
+        }
+    }
+    
+    public String getMostCommonCodon() {
+        String mostCommon = "";
+        int largestCount = 0;
+        for (String s: map.keySet()) {
+            if (map.get(s) > largestCount) {
+                mostCommon = s;
+                largestCount = map.get(s);
+            }
+        }
+        return mostCommon;
+    }
+    
+    public void printCodonCounts(int start, int end) {
+        System.out.println("Counts of codons between " 
+                                    + start + " and " + end + " inclusive are: " + "\n");
+        for (String s: map.keySet()) {
+            if (map.get(s) >= start && map.get(s) <= end) {
+                System.out.println(s + "\t" + map.get(s));
+            }
+        }
+    }
+    
+    public void test () {
+        map.clear(); 
+        FileResource fr = new FileResource();
+        String dna = fr.asString().toUpperCase().trim();
+        int readingFrame = 2;
+        buildCodonMap(readingFrame, dna);
+        System.out.println("Reading frame starting with " + readingFrame
+                            + " results in " + map.size() + " unique codons");
+        System.out.println("and most common codon and its count are: " + 
+                            getMostCommonCodon() + " " + 
+                            map.get(getMostCommonCodon()));
+        int start = 1;
+        int end = 5;
+        printCodonCounts(start,end);
+    }
+}
