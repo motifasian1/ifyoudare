@@ -117,46 +117,38 @@ int main() {
         //process input
         menu_selection = read_input();
         switch(menu_selection) {
-            case 'q':
             case 'Q':
             {
                 selected_Q;
                 break;
             }
             case 'P':
-            case 'p':
             {
                 selected_P(vec);
                 break;
             }
             case 'A':
-            case 'a': 
             {
                 selected_A(vec);
                 break;
             }
             case 'M':
-            case 'm':
             {
                 selected_M(vec);
                 break;
             }
             case 'S':
-            case 's':
             {
                 selected_S(vec);
                 break;
             }
             case 'L':
-            case 'l':
-            {
+\            {
                 selected_L(vec);
                 break;
             }
-            
             case 'C':
-            case 'c': 
-            {
+\            {
                 vec.clear();
             }
             default: 
@@ -165,7 +157,7 @@ int main() {
                 break;
             }
         }
-    } while (menu_selection != 'Q' || menu_selection != 'q');
+    } while (menu_selection != 'Q');
     
 
     
