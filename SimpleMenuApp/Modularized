@@ -1,0 +1,178 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <cctype>
+#include <string>
+
+using namespace std;
+
+void displayMenu();
+char read_input();
+void selected_Q();
+void selected_P();
+void selected_A();
+void selected_M();
+void selected_S();
+void selected_L();
+
+
+//Displays menu
+void displayMenu () {
+    vector<string> menu {"P - Print numbers\n",
+    "A - Add a number\n",
+    "M - Display mean of the numbers\n",
+    "S - Display the smallest number\n",
+    "L - Display the largest number\n",
+    "Q - Quit\n",
+    "Enter your choice: "};
+    for (string s: menu) {
+        cout<<s;
+    }
+}
+
+//Process input and return as capital letter
+char read_input() {
+    char menu_selection[256];
+    char menu_selection_char;
+    cin>>menu_selection;
+    if (strlen(menu_selection) > 1) {
+        return ' ' ;
+    } else {
+        menu_selection_char = toupper(menu_selection[0]);
+    }
+        return menu_selection_char;
+}
+
+void selected_Q() {
+     cout<<"Goodbye!\n";
+}
+
+void selected_P (vector<int> &vec) {
+        if(vec.empty()) {
+            cout<< "[] - the list is empty\n";
+        } else {
+            cout<<"[ ";
+            for (int i: vec) 
+                cout<< i << " ";
+            cout<<"]\n";
+        }
+}
+
+void selected_A (vector<int> &vec) {
+    cout<<"What integer would you like to add to the list: ";
+    int input {0};
+    cin>>input;
+    vec.push_back(input);
+    cout<<input<< " was added\n";
+}
+
+void selected_M (vector<int> &vec) {
+    if (vec.empty()) {
+                    cout<<"Unable to calculate the mean - no data\n";
+                } else {
+                    double avg = 0.0;
+                    int total = 0;
+                    for (int i: vec) {
+                        total += i;
+                    }
+                    avg = (double) total / vec.size();
+                    cout<<"Average of the list is: " << avg<<endl;
+                }
+}
+
+void selected_S (vector<int> &vec) {
+    if (vec.empty()) {
+                    cout<<"Unable to determine the smallest number - the list is empty\n";
+                } else {
+                    int smallest=99999999;
+                    for (int i: vec) {
+                        if (i<smallest) {
+                            smallest = i;
+                        }
+                    }
+                    cout<<"The smallest number is " << smallest<<endl;
+                }
+}
+
+void selected_L (vector<int> &vec) {
+    if (vec.empty()) {
+                    cout<<"Unable to determine the largest number - the list is empty\n";
+                } else {
+                    int largest = -99999999;
+                    for (int i: vec) {
+                        if (i>largest) {
+                            largest = i;
+                        }
+                    }
+                    cout<<"The largest number is " << largest<<endl;
+                }
+}
+
+
+int main() {
+    vector<int> vec { }; 
+    char menu_selection {};
+    do {
+        displayMenu();
+        //process input
+        menu_selection = read_input();
+        switch(menu_selection) {
+            case 'q':
+            case 'Q':
+            {
+                selected_Q;
+                break;
+            }
+            case 'P':
+            case 'p':
+            {
+                selected_P(vec);
+                break;
+            }
+            case 'A':
+            case 'a': 
+            {
+                selected_A(vec);
+                break;
+            }
+            case 'M':
+            case 'm':
+            {
+                selected_M(vec);
+                break;
+            }
+            case 'S':
+            case 's':
+            {
+                selected_S(vec);
+                break;
+            }
+            case 'L':
+            case 'l':
+            {
+                selected_L(vec);
+                break;
+            }
+            
+            case 'C':
+            case 'c': 
+            {
+                vec.clear();
+            }
+            default: 
+            {
+                cout<<"Unkown selection, please try again\n";
+                break;
+            }
+        }
+    } while (menu_selection != 'Q' || menu_selection != 'q');
+    
+
+    
+    bool flag_ExitMenu = false; //only set to true when Q/q is selection 
+    
+    
+    char selection {}; //user input, selection from prompt
+    
+    return 0;
+}
