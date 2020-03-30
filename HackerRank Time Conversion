@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+/*
+ * Complete the timeConversion function below.
+ */
+string timeConversion(string s) {
+    /*
+     * Write your code here.
+     */
+     string new_time = "";
+    if(s.at(8) == 'P') {
+        int hour = stoi(s.substr(0,2));
+        if (hour == 12) {
+            string string_hour = to_string(hour);
+            new_time = string_hour+s.substr(2, 6); 
+        }
+        else{
+            hour += 12;
+            string string_hour = to_string(hour);
+            new_time = string_hour+s.substr(2, 6);
+        }
+    }
+    
+     else //AM 
+    {
+        if (stoi(s.substr(0,2)) == 12)
+            return new_time = "00" + s.substr(2,6);
+        new_time = s.substr(0,8);
+    }
+return new_time;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string s;
+    getline(cin, s);
+
+    string result = timeConversion(s);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
